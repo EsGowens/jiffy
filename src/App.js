@@ -1,6 +1,11 @@
 import React, {Component} from "react";
 import loader from './images/loader.svg'
 
+const randomChoice = arr => {
+  const randIndex = Math.floor(Math.random() * arr.length);
+  return arr[randIndex];
+};
+
 const Header = () => (
   <div className='header grid'>
     <h1 className='title'>Jiffy</h1>
@@ -22,7 +27,8 @@ class App extends Component {
     this.state = {
       searchTerm: '',
       hintText: '',
-      gif: null
+      gif: null,
+      gifs: []
     };
   }
   
@@ -33,10 +39,18 @@ class App extends Component {
     // here we convert our raw response into json data
     const {data} = await response.json();
     
+    // here we grab a random result from our images
+    const randomGif = randomChoice(data);
+    
+    console.log({randomGif});
+    console.log(data);
+    
     this.setState((prevState, props) => ({
       ...prevState,
-      gif: data[0]
-    }))
+      gif: randomGif,
+      // we use our spread to take previous gif and add our new one on the end
+      gifs: [...prevState.gifs, randomGif]
+    }));
     
     } catch (error) {
       
@@ -70,9 +84,10 @@ render() {
       <div className="page">
         <Header />
         <div className='search grid'>
-        {/* this will only render our video when we have a gif in the state, we test for it with && */}
-        {gif && (
-          <video className='grid-item video' autoPlay loop src={gif.images.original.mp4}/>)}
+        
+        {/* here we loop over our arr of gif images from our state and create multiple videos from it */}
+        {this.state.gifs.map(gif => <video className='grid-item video' autoPlay loop src={gif.images.original.mp4}/>)}
+        
         <input 
         className='input grid-item' 
         placeholder='Type something' 
