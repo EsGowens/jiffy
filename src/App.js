@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import loader from './images/loader.svg'
+import Gif from './Gif'
 
 const randomChoice = arr => {
   const randIndex = Math.floor(Math.random() * arr.length);
@@ -86,7 +87,7 @@ render() {
         <div className='search grid'>
         
         {/* here we loop over our arr of gif images from our state and create multiple videos from it */}
-        {this.state.gifs.map(gif => <video className='grid-item video' autoPlay loop src={gif.images.original.mp4}/>)}
+        {this.state.gifs.map(gif => <Gif {...gif} />)}
         
         <input 
         className='input grid-item' 
